@@ -171,7 +171,7 @@ npm run build
 Then connect your repository to Vercel for automatic deployments.
 
 ### Other Platforms
-The app works on any Node.js hosting platform. Build with `npm run build` and serve the `.next` directory.
+The app works on any static hosting platform. Build with `npm run build` and serve the `out` directory.
 
 ## Browser Support
 
