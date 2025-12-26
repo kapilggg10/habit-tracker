@@ -1,4 +1,68 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" fill="#171717"/>
-  <text x="50%" y="50%" font-family="Arial" font-size="204.8" fill="white" text-anchor="middle" dominant-baseline="middle">✓</text>
+  <!-- Calendar grid representing habit tracking -->
+  <g transform="translate(92, 164)">
+    <!-- Week 1 -->
+    <rect x="0" y="0" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="48" y="0" width="40" height="40" fill="#e5e7eb" rx="8"/>
+    <rect x="96" y="0" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="144" y="0" width="40" height="40" fill="#e5e7eb" rx="8"/>
+    <rect x="192" y="0" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="240" y="0" width="40" height="40" fill="#e5e7eb" rx="8"/>
+    <rect x="288" y="0" width="40" height="40" fill="#4ade80" rx="8"/>
+
+    <!-- Week 2 -->
+    <rect x="0" y="48" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="48" y="48" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="96" y="48" width="40" height="40" fill="#e5e7eb" rx="8"/>
+    <rect x="144" y="48" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="192" y="48" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="240" y="48" width="40" height="40" fill="#e5e7eb" rx="8"/>
+    <rect x="288" y="48" width="40" height="40" fill="#4ade80" rx="8"/>
+
+    <!-- Week 3 -->
+    <rect x="0" y="96" width="40" height="40" fill="#e5e7eb" rx="8"/>
+    <rect x="48" y="96" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="96" y="96" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="144" y="96" width="40" height="40" fill="#e5e7eb" rx="8"/>
+    <rect x="192" y="96" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="240" y="96" width="40" height="40" fill="#e5e7eb" rx="8"/>
+    <rect x="288" y="96" width="40" height="40" fill="#4ade80" rx="8"/>
+
+    <!-- Week 4 -->
+    <rect x="0" y="144" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="48" y="144" width="40" height="40" fill="#e5e7eb" rx="8"/>
+    <rect x="96" y="144" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="144" y="144" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="192" y="144" width="40" height="40" fill="#e5e7eb" rx="8"/>
+    <rect x="240" y="144" width="40" height="40" fill="#4ade80" rx="8"/>
+    <rect x="288" y="144" width="40" height="40" fill="#e5e7eb" rx="8"/>
+  </g>
+
+  <!-- Checkmark overlay on completed days -->
+  <g transform="translate(92, 164)" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Week 1 checkmarks -->
+    <path d="M18 12 L12 18 L28 10" transform="translate(0, 0)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(96, 0)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(192, 0)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(288, 0)"/>
+
+    <!-- Week 2 checkmarks -->
+    <path d="M18 12 L12 18 L28 10" transform="translate(0, 48)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(48, 48)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(144, 48)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(192, 48)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(288, 48)"/>
+
+    <!-- Week 3 checkmarks -->
+    <path d="M18 12 L12 18 L28 10" transform="translate(48, 96)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(96, 96)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(192, 96)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(288, 96)"/>
+
+    <!-- Week 4 checkmarks -->
+    <path d="M18 12 L12 18 L28 10" transform="translate(0, 144)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(96, 144)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(144, 144)"/>
+    <path d="M18 12 L12 18 L28 10" transform="translate(240, 144)"/>
+  </g>
 </svg>
