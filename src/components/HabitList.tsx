@@ -158,8 +158,8 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
           if (deleteTarget) {
             deleteHabit(deleteTarget.id);
             window.dispatchEvent(new Event("habitsUpdated"));
-            setDeleteTarget(null);
             onHabitCreated();
+            setDeleteTarget(null);
           }
         }}
         onCancel={() => setDeleteTarget(null)}

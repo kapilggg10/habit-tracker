@@ -178,6 +178,8 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
   const handleDelete = () => {
     deleteHabit(habit.id);
     window.dispatchEvent(new Event("habitsUpdated"));
+    setShowDeleteConfirm(false);
+    window.location.hash = "";
     router.push("/");
   };
 
