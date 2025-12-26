@@ -1,11 +1,11 @@
 import { HabitTrackerShell } from "@/components/HabitTrackerShell";
 
-interface HabitPageProps {
-  params: Promise<{ id: string }>;
+export function generateStaticParams() {
+  return []
 }
 
-export default async function HabitPage({ params }: HabitPageProps) {
-  const { id } = await params;
+export default function HabitPage({ params }: { params: { id: string } }) {
+  const { id } = params;
 
   return (
     <div className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">

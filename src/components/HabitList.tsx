@@ -86,7 +86,7 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
             >
               <div className="relative h-full rounded-lg bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 p-6 dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-700/60 dark:to-gray-700/90">
                 <button
-                  onClick={() => router.push(`/habit/${habit.id}`)}
+                  onClick={() => window.location.hash = `habit-${habit.id}`}
                   className="w-full text-left focus:outline-none"
                 >
                 <div className="mb-4 flex items-center gap-3">

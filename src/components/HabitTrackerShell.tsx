@@ -58,7 +58,7 @@ export function HabitTrackerShell({ habitId }: HabitTrackerShellProps) {
   return (
     <div className="w-full">
       <button
-        onClick={() => router.push("/")}
+        onClick={() => window.location.hash = ""}
         className="mb-6 flex items-center gap-2 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
       >
         <svg

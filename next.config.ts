@@ -2,7 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  reactCompiler: true,
   // Enable static export for Netlify deployment
   output: 'export',
   // Disable image optimization for static export
