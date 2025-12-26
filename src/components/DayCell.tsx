@@ -37,16 +37,20 @@ export function DayCell({
     textColor = "text-gray-900 dark:text-gray-50 font-medium";
   } else {
     // Non-completed: use gradient grey
-    bgColor = "bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 dark:from-gray-800 dark:via-gray-700/80 dark:to-gray-800";
+    bgColor =
+      "bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 dark:from-gray-800 dark:via-gray-700/80 dark:to-gray-800";
   }
 
   const cellStyle: React.CSSProperties = {};
-  
+
   if (isCompleted) {
     cellStyle.backgroundColor = habitColor;
     cellStyle.borderColor = habitColor;
   } else if (isPartial) {
-    cellStyle.backgroundColor = getColorWithOpacity(habitColor, percentage / 100);
+    cellStyle.backgroundColor = getColorWithOpacity(
+      habitColor,
+      percentage / 100,
+    );
   }
 
   if (isToday) {
@@ -91,4 +95,3 @@ export function DayCell({
     </button>
   );
 }
-

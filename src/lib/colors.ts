@@ -16,4 +16,3 @@ export const PRESET_COLORS: ColorOption[] = [
 ];
 
 export const DEFAULT_COLOR = PRESET_COLORS[0]!.hex;
-

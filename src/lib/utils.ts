@@ -30,9 +30,11 @@ export function getColorWithOpacity(color: string, opacity: number): string {
 
 export function playCompletionSound(): void {
   try {
-    const audioContext = new (window.AudioContext ||
+    const audioContext = new (
+      window.AudioContext ||
       (window as unknown as { webkitAudioContext: typeof AudioContext })
-        .webkitAudioContext)();
+        .webkitAudioContext
+    )();
 
     // Create a pleasant ascending musical sequence (C major chord progression)
     const notes = [
@@ -82,4 +84,3 @@ export function getCompletionStats(habit: Habit): {
 
   return { total, completed, partial, notCompleted };
 }
-

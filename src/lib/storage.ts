@@ -23,7 +23,10 @@ export function getHabits(): Habit[] {
   }
 }
 
-export function createHabit(name: string, color: string = DEFAULT_COLOR): Habit {
+export function createHabit(
+  name: string,
+  color: string = DEFAULT_COLOR,
+): Habit {
   const habit: Habit = {
     id: nanoid(),
     name: name.trim(),
@@ -76,4 +79,3 @@ export function bulkMarkHabitsForDate(
   });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
 }
-

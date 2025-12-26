@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { getCompletionStats, formatDate, playCompletionSound } from "@/lib/utils";
+import {
+  getCompletionStats,
+  formatDate,
+  playCompletionSound,
+} from "@/lib/utils";
 import { deleteHabit, updateHabitEntry } from "@/lib/storage";
 import type { Habit } from "@/types/habit";
 import { CreateHabitDialog } from "./CreateHabitDialog";
@@ -26,7 +30,7 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
     const today = formatDate(new Date());
     const selectedSet = new Set(selectedHabitIds);
     let hasNewCompletions = false;
-    
+
     // Mark selected habits as 100%
     selectedHabitIds.forEach((habitId) => {
       const habit = habits.find((h) => h.id === habitId);
@@ -37,25 +41,25 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
         hasNewCompletions = true;
       }
     });
-    
+
     // Mark deselected habits that were previously completed as 0%
     habits.forEach((habit) => {
       const wasCompleted = habit.entries[today] === 100;
       const isSelected = selectedSet.has(habit.id);
-      
+
       // If habit was completed but is now deselected, mark as 0%
       if (wasCompleted && !isSelected) {
         updateHabitEntry(habit.id, today, 0);
       }
     });
-    
+
     // Trigger confetti and sound if at least one new habit was marked as complete
     if (hasNewCompletions) {
       setShowConfetti(true);
       playCompletionSound();
       setTimeout(() => setShowConfetti(false), 2000);
     }
-    
+
     // Update UI
     window.dispatchEvent(new Event("habitsUpdated"));
     setIsBulkMarkDialogOpen(false);
@@ -86,32 +90,32 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
             >
               <div className="relative h-full rounded-lg bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 p-6 dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-700/60 dark:to-gray-700/90">
                 <button
-                  onClick={() => window.location.hash = `habit-${habit.id}`}
+                  onClick={() => (window.location.hash = `habit-${habit.id}`)}
                   className="w-full text-left focus:outline-none"
                 >
-                <div className="mb-4 flex items-center gap-3">
-                  <div
-                    className="h-5 w-5 rounded-full transition-transform group-hover:scale-110"
-                    style={{ backgroundColor: habit.color }}
-                  />
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50">
-                    {habit.name}
-                  </h2>
-                </div>
-                <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                  <div className="flex justify-between">
-                    <span>Completed:</span>
-                    <span className="font-medium">{stats.completed}</span>
+                  <div className="mb-4 flex items-center gap-3">
+                    <div
+                      className="h-5 w-5 rounded-full transition-transform group-hover:scale-110"
+                      style={{ backgroundColor: habit.color }}
+                    />
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50">
+                      {habit.name}
+                    </h2>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Partial:</span>
-                    <span className="font-medium">{stats.partial}</span>
+                  <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="flex justify-between">
+                      <span>Completed:</span>
+                      <span className="font-medium">{stats.completed}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Partial:</span>
+                      <span className="font-medium">{stats.partial}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Total Days:</span>
+                      <span className="font-medium">{stats.total}</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Total Days:</span>
-                    <span className="font-medium">{stats.total}</span>
-                  </div>
-                </div>
                 </button>
                 <button
                   onClick={(e) => {
@@ -195,4 +199,3 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
     </div>
   );
 }
-

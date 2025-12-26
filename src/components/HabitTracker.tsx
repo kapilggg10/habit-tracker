@@ -96,7 +96,11 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
     setSelectedDate(date);
   };
 
-  const handleSave = (date: Date, percentage: number, wasNewCompletion: boolean) => {
+  const handleSave = (
+    date: Date,
+    percentage: number,
+    wasNewCompletion: boolean,
+  ) => {
     const dateStr = formatDate(date);
     updateHabitEntry(habit.id, dateStr, percentage);
     // Update local state immediately
@@ -105,13 +109,13 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
       setHabit(updatedHabit);
     }
     setSelectedDate(null);
-    
+
     // Show confetti if it's a new completion
     if (wasNewCompletion) {
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 2000);
     }
-    
+
     // Trigger re-render in other components (custom event for same-tab updates)
     window.dispatchEvent(new Event("habitsUpdated"));
   };
@@ -298,4 +302,3 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
     </div>
   );
 }
-

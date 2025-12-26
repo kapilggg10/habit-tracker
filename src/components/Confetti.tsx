@@ -46,4 +46,3 @@ export function Confetti({ color }: ConfettiProps) {
 
   return null;
 }
-

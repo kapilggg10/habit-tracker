@@ -8,7 +8,10 @@ interface ColorPickerProps {
   onColorChange: (color: string) => void;
 }
 
-export function ColorPicker({ selectedColor, onColorChange }: ColorPickerProps) {
+export function ColorPicker({
+  selectedColor,
+  onColorChange,
+}: ColorPickerProps) {
   return (
     <div className="w-full">
       <label className="mb-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -52,4 +55,3 @@ export function ColorPicker({ selectedColor, onColorChange }: ColorPickerProps) 
     </div>
   );
 }
-
