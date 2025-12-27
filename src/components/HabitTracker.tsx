@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getDaysInMonth, formatDate } from "@/lib/utils";
-import { updateHabitEntry, getHabitById, deleteHabit } from "@/lib/storage";
+import { updateHabitEntry, getHabitById, deleteHabit, getEntryPercentage, getEntryDescription } from "@/lib/storage";
 import type { Habit } from "@/types/habit";
 import { DayCell } from "./DayCell";
 import { CompletionSlider } from "./CompletionSlider";
@@ -100,9 +100,10 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
     date: Date,
     percentage: number,
     wasNewCompletion: boolean,
+    description?: string,
   ) => {
     const dateStr = formatDate(date);
-    updateHabitEntry(habit.id, dateStr, percentage);
+    updateHabitEntry(habit.id, dateStr, percentage, description);
     // Update local state immediately
     const updatedHabit = getHabitById(habit.id);
     if (updatedHabit) {
@@ -126,7 +127,12 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
 
   const getPercentageForDate = (date: Date): number => {
     const dateStr = formatDate(date);
-    return habit.entries[dateStr] ?? 0;
+    return getEntryPercentage(habit.entries[dateStr]);
+  };
+
+  const getDescriptionForDate = (date: Date): string | undefined => {
+    const dateStr = formatDate(date);
+    return getEntryDescription(habit.entries[dateStr]);
   };
 
   const isToday = (date: Date): boolean => {
@@ -285,9 +291,10 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
         <CompletionSlider
           date={selectedDate}
           initialPercentage={getPercentageForDate(selectedDate)}
+          initialDescription={getDescriptionForDate(selectedDate)}
           habitColor={habit.color}
-          onSave={(percentage, wasNewCompletion) =>
-            handleSave(selectedDate, percentage, wasNewCompletion)
+          onSave={(percentage, wasNewCompletion, description) =>
+            handleSave(selectedDate, percentage, wasNewCompletion, description)
           }
           onClose={() => setSelectedDate(null)}
         />

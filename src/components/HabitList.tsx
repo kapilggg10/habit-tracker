@@ -9,7 +9,7 @@ import {
   getCurrentMonthCalendarView,
   getColorWithOpacity,
 } from "@/lib/utils";
-import { deleteHabit, updateHabitEntry } from "@/lib/storage";
+import { deleteHabit, updateHabitEntry, getEntryPercentage } from "@/lib/storage";
 import type { Habit } from "@/types/habit";
 import { CreateHabitDialog } from "./CreateHabitDialog";
 import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
@@ -36,7 +36,7 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
     // Mark selected habits as 100%
     selectedHabitIds.forEach((habitId) => {
       const habit = habits.find((h) => h.id === habitId);
-      const wasCompleted = habit?.entries[today] === 100;
+      const wasCompleted = getEntryPercentage(habit?.entries[today]) === 100;
       updateHabitEntry(habitId, today, 100);
       // Track if this is a new completion (wasn't 100% before)
       if (!wasCompleted) {
@@ -46,7 +46,7 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
 
     // Mark deselected habits that were previously completed as 0%
     habits.forEach((habit) => {
-      const wasCompleted = habit.entries[today] === 100;
+      const wasCompleted = getEntryPercentage(habit.entries[today]) === 100;
       const isSelected = selectedSet.has(habit.id);
 
       // If habit was completed but is now deselected, mark as 0%
@@ -125,10 +125,11 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
                           );
                         }
 
-                        const percentage = habit.entries[dateStr] ?? 0;
+                        const entry = habit.entries[dateStr];
+                        const percentage = getEntryPercentage(entry);
                         const isCompleted = percentage === 100;
                         const isPartial = percentage > 0 && percentage < 100;
-                        const isIncomplete = percentage === 0 || !habit.entries[dateStr];
+                        const isIncomplete = percentage === 0 || !entry;
 
                         if (isCompleted) {
                           // Create tilted grid pattern using linear gradients

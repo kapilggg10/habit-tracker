@@ -1,7 +1,7 @@
 "use client";
 
 import { nanoid } from "nanoid";
-import type { Habit } from "@/types/habit";
+import type { Habit, HabitEntry } from "@/types/habit";
 import { DEFAULT_COLOR } from "./colors";
 
 const STORAGE_KEY = "habits";
@@ -42,10 +42,33 @@ export function createHabit(
   return habit;
 }
 
+// Helper function to normalize entry (convert old number format to new object format)
+function normalizeEntry(entry: HabitEntry | number | undefined): HabitEntry {
+  if (entry === undefined) {
+    return { percentage: 0 };
+  }
+  if (typeof entry === "number") {
+    return { percentage: entry };
+  }
+  return entry;
+}
+
+// Helper function to get percentage from entry (handles both old and new formats)
+export function getEntryPercentage(entry: HabitEntry | number | undefined): number {
+  return normalizeEntry(entry).percentage;
+}
+
+// Helper function to get description from entry
+export function getEntryDescription(entry: HabitEntry | number | undefined): string | undefined {
+  const normalized = normalizeEntry(entry);
+  return normalized.description;
+}
+
 export function updateHabitEntry(
   habitId: string,
   date: string,
   percentage: number,
+  description?: string,
 ): void {
   const habits = getHabits();
   const habit = habits.find((h) => h.id === habitId);
@@ -54,7 +77,19 @@ export function updateHabitEntry(
     throw new Error(`Habit with id ${habitId} not found`);
   }
 
-  habit.entries[date] = Math.max(0, Math.min(100, percentage));
+  const normalizedPercentage = Math.max(0, Math.min(100, percentage));
+  
+  // Only save description if percentage < 100 (not completed)
+  if (normalizedPercentage < 100 && description !== undefined) {
+    habit.entries[date] = {
+      percentage: normalizedPercentage,
+      description: description.trim() || undefined,
+    };
+  } else {
+    // For completed entries (100%), just store percentage
+    habit.entries[date] = normalizedPercentage;
+  }
+  
   localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
 }
 
@@ -75,7 +110,13 @@ export function bulkMarkHabitsForDate(
 ): void {
   const habits = getHabits();
   habits.forEach((habit) => {
-    habit.entries[date] = Math.max(0, Math.min(100, percentage));
+    const normalizedPercentage = Math.max(0, Math.min(100, percentage));
+    // For bulk mark, we don't include descriptions (just mark as complete/partial)
+    if (normalizedPercentage === 100) {
+      habit.entries[date] = normalizedPercentage;
+    } else {
+      habit.entries[date] = { percentage: normalizedPercentage };
+    }
   });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
 }

@@ -1,4 +1,5 @@
 import type { Habit } from "@/types/habit";
+import { getEntryPercentage } from "./storage";
 
 export function getDaysInMonth(year: number, month: number): Date[] {
   const days: Date[] = [];
@@ -114,9 +115,12 @@ export function getCompletionStats(habit: Habit): {
 } {
   const entries = Object.values(habit.entries);
   const total = entries.length;
-  const completed = entries.filter((p) => p === 100).length;
-  const partial = entries.filter((p) => p > 0 && p < 100).length;
-  const notCompleted = entries.filter((p) => p === 0).length;
+  const completed = entries.filter((entry) => getEntryPercentage(entry) === 100).length;
+  const partial = entries.filter((entry) => {
+    const p = getEntryPercentage(entry);
+    return p > 0 && p < 100;
+  }).length;
+  const notCompleted = entries.filter((entry) => getEntryPercentage(entry) === 0).length;
 
   return { total, completed, partial, notCompleted };
 }

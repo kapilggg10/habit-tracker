@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import type { Habit } from "@/types/habit";
 import { formatDate } from "@/lib/utils";
+import { getEntryPercentage } from "@/lib/storage";
 
 interface BulkMarkDialogProps {
   isOpen: boolean;
@@ -25,7 +26,7 @@ export function BulkMarkDialog({
       // Pre-select habits that are already completed for today
       const completedIds = new Set<string>();
       habits.forEach((habit) => {
-        if (habit.entries[today] === 100) {
+        if (getEntryPercentage(habit.entries[today]) === 100) {
           completedIds.add(habit.id);
         }
       });
@@ -50,7 +51,7 @@ export function BulkMarkDialog({
   };
 
   const isCompleted = (habit: Habit): boolean => {
-    return habit.entries[today] === 100;
+    return getEntryPercentage(habit.entries[today]) === 100;
   };
 
   if (!isOpen) return null;
