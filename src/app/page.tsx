@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { HabitListShell } from "@/components/HabitListShell";
 import { HabitTrackerShell } from "@/components/HabitTrackerShell";
+import { InspirationFooter } from "@/components/InspirationFooter";
 
 export default function Home() {
   const [selectedHabitId, setSelectedHabitId] = useState<string | null>(null);
@@ -28,17 +29,21 @@ export default function Home() {
 
   if (selectedHabitId) {
     return (
-      <div className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <HabitTrackerShell habitId={selectedHabitId} />
+      <div className="flex min-h-screen flex-col">
+        <div className="flex-1 px-4 py-10 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl animate-fade-in">
+            <HabitTrackerShell habitId={selectedHabitId} />
+          </div>
         </div>
+        <InspirationFooter />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <HabitListShell />
+      <InspirationFooter />
     </div>
   );
 }

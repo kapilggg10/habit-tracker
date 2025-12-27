@@ -153,7 +153,7 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
     days.forEach((day) => calendarDays.push(day));
 
     return (
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-3">
         {calendarDays.map((date, index) => {
           if (date === null) {
             return <div key={`empty-${index}`} />;
@@ -185,19 +185,19 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
 
   return (
     <div className="w-full">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div
-            className="h-6 w-6 rounded-full"
+            className="h-7 w-7 rounded-full shadow-sm"
             style={{ backgroundColor: habit.color }}
           />
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
             {habit.name}
           </h1>
         </div>
         <button
           onClick={() => setShowDeleteConfirm(true)}
-          className="rounded-lg px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 dark:hover:bg-red-900/20"
+          className="rounded-xl px-5 py-2.5 text-sm font-medium text-red-600 transition-all duration-200 hover:scale-105 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 dark:hover:bg-red-900/20 active:scale-95"
           aria-label={`Delete ${habit.name}`}
         >
           Delete
@@ -205,13 +205,13 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
       </div>
 
       {/* Month Navigation */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-8 flex items-center justify-between">
         <button
           onClick={handlePreviousMonth}
           disabled={!canGoPrevious}
-          className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
             canGoPrevious
-              ? "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+              ? "text-gray-700 hover:scale-105 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 active:scale-95"
               : "cursor-not-allowed text-gray-400 opacity-50 dark:text-gray-600"
           }`}
           aria-label="Previous month"
@@ -232,7 +232,7 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
           <span className="hidden sm:inline">Previous</span>
         </button>
 
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
+        <h2 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-50">
           {new Date(viewYear, viewMonth).toLocaleDateString("en-US", {
             month: "long",
             year: "numeric",
@@ -242,9 +242,9 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
         <button
           onClick={handleNextMonth}
           disabled={!canGoNext}
-          className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
             canGoNext
-              ? "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+              ? "text-gray-700 hover:scale-105 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 active:scale-95"
               : "cursor-not-allowed text-gray-400 opacity-50 dark:text-gray-600"
           }`}
           aria-label="Next month"
@@ -268,11 +268,11 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
 
       {/* Calendar */}
       <div>
-        <div className="mb-2 grid grid-cols-7 gap-2">
+        <div className="mb-3 grid grid-cols-7 gap-2">
           {weekDays.map((day) => (
             <div
               key={day}
-              className="text-center text-xs font-medium text-gray-500 dark:text-gray-400"
+              className="text-center text-xs font-semibold tracking-wide text-gray-500 dark:text-gray-400"
             >
               {day}
             </div>

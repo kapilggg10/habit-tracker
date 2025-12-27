@@ -47,17 +47,17 @@ export function CompletionSlider({
   return (
     <>
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-fade-in-backdrop"
         onClick={onClose}
       >
         <div
-          className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-gray-800"
+          className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl animate-slide-up-scale dark:bg-gray-800"
           onClick={(e) => e.stopPropagation()}
         >
-          <h2 className="mb-2 text-xl font-bold text-gray-900 dark:text-gray-50">
+          <h2 className="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
             {dateStr}
           </h2>
-          <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
+          <p className="mb-8 text-sm text-gray-600 dark:text-gray-400">
             Mark your completion for this day
           </p>
 
@@ -89,13 +89,13 @@ export function CompletionSlider({
             </div>
           </div>
 
-          <div className="mb-6 flex gap-2">
+          <div className="mb-8 flex gap-2">
             <button
               type="button"
               onClick={() => handleQuickSelect(0)}
-              className={`flex-1 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+              className={`flex-1 rounded-xl border px-4 py-3 text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95 ${
                 percentage === 0
-                  ? "border-gray-900 bg-gray-900 text-white dark:border-gray-100 dark:bg-gray-100 dark:text-gray-900"
+                  ? "border-gray-900 bg-gray-900 text-white shadow-md dark:border-gray-100 dark:bg-gray-100 dark:text-gray-900"
                   : "border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
               }`}
             >
@@ -104,9 +104,9 @@ export function CompletionSlider({
             <button
               type="button"
               onClick={() => handleQuickSelect(50)}
-              className={`flex-1 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+              className={`flex-1 rounded-xl border px-4 py-3 text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95 ${
                 percentage === 50
-                  ? "border-gray-900 bg-gray-900 text-white dark:border-gray-100 dark:bg-gray-100 dark:text-gray-900"
+                  ? "border-gray-900 bg-gray-900 text-white shadow-md dark:border-gray-100 dark:bg-gray-100 dark:text-gray-900"
                   : "border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
               }`}
             >
@@ -115,9 +115,9 @@ export function CompletionSlider({
             <button
               type="button"
               onClick={() => handleQuickSelect(100)}
-              className={`flex-1 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+              className={`flex-1 rounded-xl border px-4 py-3 text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95 ${
                 percentage === 100
-                  ? "border-gray-900 bg-gray-900 text-white dark:border-gray-100 dark:bg-gray-100 dark:text-gray-900"
+                  ? "border-gray-900 bg-gray-900 text-white shadow-md dark:border-gray-100 dark:bg-gray-100 dark:text-gray-900"
                   : "border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
               }`}
             >
@@ -165,14 +165,14 @@ export function CompletionSlider({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-400"
+              className="flex-1 rounded-xl border border-gray-300 px-5 py-3 font-medium text-gray-700 transition-all duration-200 hover:scale-105 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 active:scale-95 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-400"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={handleSave}
-              className="flex-1 rounded-lg bg-gray-900 px-4 py-2 font-medium text-white transition-colors hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-100"
+              className="flex-1 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 px-5 py-3 font-medium text-white shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95"
             >
               Save
             </button>

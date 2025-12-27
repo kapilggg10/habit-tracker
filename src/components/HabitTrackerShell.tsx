@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getHabitById } from "@/lib/storage";
+import { playClickSound } from "@/lib/utils";
 import type { Habit } from "@/types/habit";
 import { HabitTracker } from "./HabitTracker";
 
@@ -58,7 +59,10 @@ export function HabitTrackerShell({ habitId }: HabitTrackerShellProps) {
   return (
     <div className="w-full">
       <button
-        onClick={() => (window.location.hash = "")}
+        onClick={() => {
+          playClickSound();
+          window.location.hash = "";
+        }}
         className="mb-6 flex items-center gap-2 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
       >
         <svg

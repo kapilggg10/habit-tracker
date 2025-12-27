@@ -43,12 +43,20 @@ export function HabitListShell() {
   }
 
   if (habits.length === 0) {
-    return <EmptyState />;
+    return (
+      <div className="flex-1">
+        <EmptyState />
+      </div>
+    );
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <HabitList habits={habits} onHabitCreated={loadHabits} />
+    <div className="flex-1">
+      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="animate-fade-in">
+          <HabitList habits={habits} onHabitCreated={loadHabits} />
+        </div>
+      </div>
     </div>
   );
 }

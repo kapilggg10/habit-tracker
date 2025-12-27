@@ -41,14 +41,14 @@ export function CreateHabitDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-fade-in-backdrop"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-gray-800"
+        className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl animate-slide-up-scale dark:bg-gray-800"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-50">
+        <h2 className="mb-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
           Create New Habit
         </h2>
         <form onSubmit={handleSubmit}>
@@ -65,7 +65,7 @@ export function CreateHabitDialog({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., Exercise, Read, Meditate"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-50 dark:focus:border-gray-400 dark:focus:ring-gray-400"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 transition-all duration-200 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-0 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-50 dark:focus:border-gray-400 dark:focus:ring-gray-400"
               autoFocus
               required
             />
@@ -80,13 +80,13 @@ export function CreateHabitDialog({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-400"
+              className="flex-1 rounded-xl border border-gray-300 px-5 py-3 font-medium text-gray-700 transition-all duration-200 hover:scale-105 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 active:scale-95 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-400"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 rounded-lg bg-gray-900 px-4 py-2 font-medium text-white transition-colors hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-100"
+              className="flex-1 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 px-5 py-3 font-medium text-white shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95"
             >
               Create
             </button>

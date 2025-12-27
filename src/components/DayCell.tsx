@@ -1,6 +1,6 @@
 "use client";
 
-import { formatDate, getColorWithOpacity } from "@/lib/utils";
+import { formatDate, getColorWithOpacity, playClickSound } from "@/lib/utils";
 
 interface DayCellProps {
   date: Date;
@@ -46,39 +46,85 @@ export function DayCell({
   if (isCompleted) {
     cellStyle.backgroundColor = habitColor;
     cellStyle.borderColor = habitColor;
+    // Add tilted grid pattern
+    cellStyle.backgroundImage = `repeating-linear-gradient(15deg, transparent, transparent 1px, rgba(255,255,255,0.25) 1px, rgba(255,255,255,0.25) 1.5px),
+      repeating-linear-gradient(105deg, transparent, transparent 1px, rgba(255,255,255,0.25) 1px, rgba(255,255,255,0.25) 1.5px)`;
   } else if (isPartial) {
     cellStyle.backgroundColor = getColorWithOpacity(
       habitColor,
       percentage / 100,
     );
+    // Add tilted grid pattern
+    cellStyle.backgroundImage = `repeating-linear-gradient(15deg, transparent, transparent 1px, rgba(255,255,255,0.3) 1px, rgba(255,255,255,0.3) 1.5px),
+      repeating-linear-gradient(105deg, transparent, transparent 1px, rgba(255,255,255,0.3) 1px, rgba(255,255,255,0.3) 1.5px)`;
   }
 
   if (isToday) {
+    // Only show gradient border when incomplete (0% or no entry)
+    const isIncomplete = !isCompleted && !isPartial;
+    
+    if (isIncomplete) {
+      return (
+        <div className="mx-auto flex h-10 w-10 max-[300px]:h-8 max-[300px]:w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-[2px]">
+          <button
+            onClick={() => {
+              if (!isFuture) {
+                playClickSound();
+                onClick();
+              }
+            }}
+            disabled={isFuture}
+            className={`
+              relative flex h-full w-full items-center justify-center rounded-full border transition-all
+              ${bgColor}
+              ${borderColor}
+              ${textColor}
+              ${isFuture ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:scale-105 active:scale-95"}
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400
+            `}
+            style={cellStyle}
+            aria-label={`${formatDate(date)} - ${isCompleted ? "Completed" : isPartial ? `${percentage}% completed` : "Not completed"}`}
+          >
+            <span className="text-sm max-[300px]:text-xs">{dayNumber}</span>
+          </button>
+        </div>
+      );
+    }
+    
+    // For completed or partial days, render without gradient border
     return (
-      <div className="mx-auto flex h-10 w-10 max-[300px]:h-8 max-[300px]:w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-[2px]">
-        <button
-          onClick={onClick}
-          disabled={isFuture}
-          className={`
-            relative flex h-full w-full items-center justify-center rounded-full border transition-all
-            ${bgColor}
-            ${borderColor}
-            ${textColor}
-            ${isFuture ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:scale-105 active:scale-95"}
-            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400
-          `}
-          style={cellStyle}
-          aria-label={`${formatDate(date)} - ${isCompleted ? "Completed" : isPartial ? `${percentage}% completed` : "Not completed"}`}
-        >
-          <span className="text-sm max-[300px]:text-xs">{dayNumber}</span>
-        </button>
-      </div>
+      <button
+        onClick={() => {
+          if (!isFuture) {
+            playClickSound();
+            onClick();
+          }
+        }}
+        disabled={isFuture}
+        className={`
+          relative mx-auto flex h-10 w-10 max-[300px]:h-8 max-[300px]:w-8 items-center justify-center rounded-full border transition-all
+          ${bgColor}
+          ${borderColor}
+          ${textColor}
+          ${isFuture ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:scale-105 active:scale-95"}
+          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400
+        `}
+        style={cellStyle}
+        aria-label={`${formatDate(date)} - ${isCompleted ? "Completed" : isPartial ? `${percentage}% completed` : "Not completed"}`}
+      >
+        <span className="text-sm max-[300px]:text-xs">{dayNumber}</span>
+      </button>
     );
   }
 
   return (
     <button
-      onClick={onClick}
+      onClick={() => {
+        if (!isFuture) {
+          playClickSound();
+          onClick();
+        }
+      }}
       disabled={isFuture}
       className={`
         relative mx-auto flex h-10 w-10 max-[300px]:h-8 max-[300px]:w-8 items-center justify-center rounded-full border transition-all

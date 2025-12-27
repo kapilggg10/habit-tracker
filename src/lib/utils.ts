@@ -70,6 +70,42 @@ export function playCompletionSound(): void {
   }
 }
 
+export function playClickSound(): void {
+  try {
+    const audioContext = new (
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext })
+        .webkitAudioContext
+    )();
+
+    // Create a pleasant, soft click sound
+    // Using a quick, gentle tone that fades out smoothly
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    // Pleasant frequency - A4 (440 Hz) with a slight higher harmonic
+    oscillator.frequency.value = 440;
+    oscillator.type = "sine";
+
+    const now = audioContext.currentTime;
+    const duration = 0.1; // Short click sound
+
+    // Quick attack, smooth decay
+    gainNode.gain.setValueAtTime(0, now);
+    gainNode.gain.linearRampToValueAtTime(0.15, now + 0.01); // Quick attack
+    gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration); // Smooth decay
+
+    oscillator.start(now);
+    oscillator.stop(now + duration);
+  } catch (error) {
+    // Silently fail if audio context is not available
+    console.debug("Click sound not available", error);
+  }
+}
+
 export function getCompletionStats(habit: Habit): {
   total: number;
   completed: number;
@@ -83,4 +119,65 @@ export function getCompletionStats(habit: Habit): {
   const notCompleted = entries.filter((p) => p === 0).length;
 
   return { total, completed, partial, notCompleted };
+}
+
+export function getCurrentMonthDateRange(habit: Habit): string[] {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth();
+
+  // First day of current month
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+  firstDayOfMonth.setHours(0, 0, 0, 0);
+
+  // Always start from the first day of the current month
+  const startDate = firstDayOfMonth;
+
+  // End date: today
+  const endDate = today;
+
+  // Generate array of date strings
+  const dates: string[] = [];
+  const currentDate = new Date(startDate);
+
+  while (currentDate <= endDate) {
+    dates.push(formatDate(new Date(currentDate)));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dates;
+}
+
+export function getCurrentMonthCalendarView(habit: Habit): (string | null)[] {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth();
+
+  // First day of current month
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+  firstDayOfMonth.setHours(0, 0, 0, 0);
+
+  // Get day of week for the 1st (0 = Sunday, 1 = Monday, etc.)
+  const firstDayOfWeek = firstDayOfMonth.getDay();
+
+  // Create calendar array with 7 columns (one for each day of week)
+  const calendar: (string | null)[] = [];
+
+  // Add empty cells for days before the 1st
+  for (let i = 0; i < firstDayOfWeek; i++) {
+    calendar.push(null);
+  }
+
+  // Add all days from 1st to today
+  const currentDate = new Date(firstDayOfMonth);
+  while (currentDate <= today) {
+    calendar.push(formatDate(new Date(currentDate)));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return calendar;
 }
