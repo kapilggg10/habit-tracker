@@ -1,11 +1,14 @@
 {
   "name": "habit-tracker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/generate-version.js",
     "build": "next build",
     "start": "next start",
+    "serve": "npx serve@latest out -p 3000",
+    "test:sw": "npm run build && npm run serve",
     "lint": "biome check",
     "format": "biome format --write"
   },
