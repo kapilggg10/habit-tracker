@@ -9,7 +9,11 @@ import {
   getCurrentMonthCalendarView,
   getColorWithOpacity,
 } from "@/lib/utils";
-import { deleteHabit, updateHabitEntry, getEntryPercentage } from "@/lib/storage";
+import {
+  deleteHabit,
+  updateHabitEntry,
+  getEntryPercentage,
+} from "@/lib/storage";
 import type { Habit } from "@/types/habit";
 import { CreateHabitDialog } from "./CreateHabitDialog";
 import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
@@ -88,7 +92,7 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {habits.map((habit, index) => {
           const calendar = getCurrentMonthCalendarView(habit);
-          
+
           return (
             <div
               key={habit.id}
@@ -129,18 +133,17 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
                         const percentage = getEntryPercentage(entry);
                         const isCompleted = percentage === 100;
                         const isPartial = percentage > 0 && percentage < 100;
-                        const isIncomplete = percentage === 0 || !entry;
+                        const isIncomplete = percentage === 0;
 
                         if (isCompleted) {
                           // Create tilted grid pattern using linear gradients
                           const gridPattern = `repeating-linear-gradient(15deg, transparent, transparent 1px, rgba(255,255,255,0.2) 1px, rgba(255,255,255,0.2) 1.5px),
                             repeating-linear-gradient(105deg, transparent, transparent 1px, rgba(255,255,255,0.2) 1px, rgba(255,255,255,0.2) 1.5px)`;
-                          
                           return (
                             <div
                               key={dateStr}
                               className="h-3.5 w-3.5 rounded-full transition-all duration-200 hover:scale-110"
-                              style={{ 
+                              style={{
                                 backgroundImage: gridPattern,
                                 backgroundColor: habit.color,
                               }}
@@ -151,10 +154,12 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
 
                         if (isPartial) {
                           // Create tilted grid pattern with partial opacity
-                          const partialColor = getColorWithOpacity(habit.color, 0.65);
+                          const partialColor = getColorWithOpacity(
+                            habit.color,
+                            0.65
+                          );
                           const gridPattern = `repeating-linear-gradient(15deg, transparent, transparent 1px, rgba(255,255,255,0.25) 1px, rgba(255,255,255,0.25) 1.5px),
                             repeating-linear-gradient(105deg, transparent, transparent 1px, rgba(255,255,255,0.25) 1px, rgba(255,255,255,0.25) 1.5px)`;
-                          
                           return (
                             <div
                               key={dateStr}
@@ -165,6 +170,30 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
                               }}
                               title={`${dateStr}: ${percentage}%`}
                             />
+                          );
+                        }
+
+                        if (isIncomplete) {
+                          // show a small cross icon in the center of the cell
+                          return (
+                            <div
+                              key={dateStr}
+                              className="flex items-center justify-center h-3.5 w-3.5 rounded-full bg-gray-200 dark:bg-gray-600 transition-all duration-200 hover:bg-gray-300 dark:hover:bg-gray-500"
+                            >
+                              <svg
+                                className="h-2 w-2"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="red"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                            </div>
                           );
                         }
 

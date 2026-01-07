@@ -112,6 +112,7 @@ export function getCompletionStats(habit: Habit): {
   completed: number;
   partial: number;
   notCompleted: number;
+  notMarked: number;
 } {
   const entries = Object.values(habit.entries);
   const total = entries.length;
@@ -120,9 +121,10 @@ export function getCompletionStats(habit: Habit): {
     const p = getEntryPercentage(entry);
     return p > 0 && p < 100;
   }).length;
+  const notMarked = entries.filter((entry) => getEntryPercentage(entry) === -1).length;
   const notCompleted = entries.filter((entry) => getEntryPercentage(entry) === 0).length;
 
-  return { total, completed, partial, notCompleted };
+  return { total, completed, partial, notCompleted, notMarked };
 }
 
 export function getCurrentMonthDateRange(habit: Habit): string[] {

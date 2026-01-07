@@ -11,6 +11,21 @@ interface DayCellProps {
   onClick: () => void;
 }
 
+const IncompleteCell = () => {
+  return (
+    <span className="absolute top-1 left-1 transform -translate-x-1 -translate-y-1">
+      <svg className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="red">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1}
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </span>
+  );
+};
+
 export function DayCell({
   date,
   percentage,
@@ -22,6 +37,8 @@ export function DayCell({
   const dayNumber = date.getDate();
   const isCompleted = percentage === 100;
   const isPartial = percentage > 0 && percentage < 100;
+  const isIncomplete = percentage === 0;
+  const isNotFilled = percentage === -1;
 
   let bgColor = "";
   let borderColor = "border";
@@ -52,7 +69,7 @@ export function DayCell({
   } else if (isPartial) {
     cellStyle.backgroundColor = getColorWithOpacity(
       habitColor,
-      percentage / 100,
+      percentage / 100
     );
     // Add tilted grid pattern
     cellStyle.backgroundImage = `repeating-linear-gradient(15deg, transparent, transparent 1px, rgba(255,255,255,0.3) 1px, rgba(255,255,255,0.3) 1.5px),
@@ -60,10 +77,7 @@ export function DayCell({
   }
 
   if (isToday) {
-    // Only show gradient border when incomplete (0% or no entry)
-    const isIncomplete = !isCompleted && !isPartial;
-    
-    if (isIncomplete) {
+    if (isNotFilled || isIncomplete) {
       return (
         <div className="mx-auto flex h-10 w-10 max-[300px]:h-8 max-[300px]:w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-[2px]">
           <button
@@ -79,18 +93,28 @@ export function DayCell({
               ${bgColor}
               ${borderColor}
               ${textColor}
-              ${isFuture ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:scale-105 active:scale-95"}
+              ${
+                isFuture
+                  ? "cursor-not-allowed opacity-50"
+                  : "cursor-pointer hover:scale-105 active:scale-95"
+              }
               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400
             `}
             style={cellStyle}
-            aria-label={`${formatDate(date)} - ${isCompleted ? "Completed" : isPartial ? `${percentage}% completed` : "Not completed"}`}
+            aria-label={`${formatDate(date)} - ${
+              isCompleted
+                ? "Completed"
+                : isPartial
+                ? `${percentage}% completed`
+                : "Not completed"
+            }`}
           >
             <span className="text-sm max-[300px]:text-xs">{dayNumber}</span>
           </button>
         </div>
       );
     }
-    
+
     // For completed or partial days, render without gradient border
     return (
       <button
@@ -106,11 +130,21 @@ export function DayCell({
           ${bgColor}
           ${borderColor}
           ${textColor}
-          ${isFuture ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:scale-105 active:scale-95"}
+          ${
+            isFuture
+              ? "cursor-not-allowed opacity-50"
+              : "cursor-pointer hover:scale-105 active:scale-95"
+          }
           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400
         `}
         style={cellStyle}
-        aria-label={`${formatDate(date)} - ${isCompleted ? "Completed" : isPartial ? `${percentage}% completed` : "Not completed"}`}
+        aria-label={`${formatDate(date)} - ${
+          isCompleted
+            ? "Completed"
+            : isPartial
+            ? `${percentage}% completed`
+            : "Not completed"
+        }`}
       >
         <span className="text-sm max-[300px]:text-xs">{dayNumber}</span>
       </button>
@@ -131,13 +165,24 @@ export function DayCell({
         ${bgColor}
         ${borderColor}
         ${textColor}
-        ${isFuture ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:scale-105 active:scale-95"}
+        ${
+          isFuture
+            ? "cursor-not-allowed opacity-50"
+            : "cursor-pointer hover:scale-105 active:scale-95"
+        }
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 dark:focus:ring-gray-100
       `}
       style={cellStyle}
-      aria-label={`${formatDate(date)} - ${isCompleted ? "Completed" : isPartial ? `${percentage}% completed` : "Not completed"}`}
+      aria-label={`${formatDate(date)} - ${
+        isCompleted
+          ? "Completed"
+          : isPartial
+          ? `${percentage}% completed`
+          : "Not completed"
+      }`}
     >
-      <span className="text-sm max-[300px]:text-xs">{dayNumber}</span>
+      <span className="text-sm max-[300px]:text-xs z-10">{dayNumber}</span>
+      {isIncomplete && <IncompleteCell />}
     </button>
   );
 }

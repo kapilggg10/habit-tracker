@@ -45,7 +45,7 @@ export function createHabit(
 // Helper function to normalize entry (convert old number format to new object format)
 function normalizeEntry(entry: HabitEntry | number | undefined): HabitEntry {
   if (entry === undefined) {
-    return { percentage: 0 };
+    return { percentage: -1 };
   }
   if (typeof entry === "number") {
     return { percentage: entry };
