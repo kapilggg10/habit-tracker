@@ -29,6 +29,19 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "Habit Tracker",
   },
+  openGraph: {
+    title: "Habit Tracker",
+    description: "Track your daily habits and build consistency",
+    url: "https://ifennztracker.netlify.app/",
+    siteName: "Habit Tracker",
+    images: [
+      {
+        url: "https://ifennztracker.netlify.app/icon-512.png",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
