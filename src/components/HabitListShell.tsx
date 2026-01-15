@@ -2,18 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { getHabits } from "@/lib/storage";
-import type { Habit } from "@/types/habit";
 import { HabitList } from "./HabitList";
 import { EmptyState } from "./EmptyState";
 
+import type { Habit } from "@/types/habit";
+
 export function HabitListShell() {
   const [habits, setHabits] = useState<Habit[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   const loadHabits = () => {
     const loadedHabits = getHabits();
     setHabits(loadedHabits);
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -33,14 +32,6 @@ export function HabitListShell() {
       window.removeEventListener("focus", handleStorageChange);
     };
   }, []);
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-gray-600 dark:text-gray-400">Loading...</div>
-      </div>
-    );
-  }
 
   if (habits.length === 0) {
     return (

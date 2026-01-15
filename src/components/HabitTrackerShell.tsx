@@ -14,7 +14,6 @@ interface HabitTrackerShellProps {
 export function HabitTrackerShell({ habitId }: HabitTrackerShellProps) {
   const router = useRouter();
   const [habit, setHabit] = useState<Habit | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadHabit = () => {
@@ -24,7 +23,6 @@ export function HabitTrackerShell({ habitId }: HabitTrackerShellProps) {
         return;
       }
       setHabit(loadedHabit);
-      setIsLoading(false);
     };
 
     loadHabit();
@@ -43,14 +41,6 @@ export function HabitTrackerShell({ habitId }: HabitTrackerShellProps) {
       window.removeEventListener("focus", handleStorageChange);
     };
   }, [habitId, router]);
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-gray-600 dark:text-gray-400">Loading...</div>
-      </div>
-    );
-  }
 
   if (!habit) {
     return null;
