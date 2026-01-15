@@ -9,10 +9,12 @@ import type { Habit } from "@/types/habit";
 
 export function HabitListShell() {
   const [habits, setHabits] = useState<Habit[]>([]);
+  const [isHabitLoaded, setIsHabitLoaded] = useState(false);
 
   const loadHabits = () => {
     const loadedHabits = getHabits();
     setHabits(loadedHabits);
+    setIsHabitLoaded(true);
   };
 
   useEffect(() => {
@@ -32,6 +34,10 @@ export function HabitListShell() {
       window.removeEventListener("focus", handleStorageChange);
     };
   }, []);
+
+  if (!isHabitLoaded) {
+    return null;
+  }
 
   if (habits.length === 0) {
     return (
