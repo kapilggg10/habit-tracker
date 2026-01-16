@@ -7,7 +7,6 @@ import {
   playCompletionSound,
   playClickSound,
   getCurrentMonthCalendarView,
-  getColorWithOpacity,
 } from "@/lib/utils";
 import {
   deleteHabit,
@@ -19,6 +18,7 @@ import { CreateHabitDialog } from "./CreateHabitDialog";
 import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
 import { BulkMarkDialog } from "./BulkMarkDialog";
 import { Confetti } from "./Confetti";
+import { CalendarGrid } from "./CalendarGrid";
 
 interface HabitListProps {
   habits: Habit[];
@@ -96,8 +96,7 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
           return (
             <div
               key={habit.id}
-              className="group relative rounded-2xl bg-gradient-to-br from-blue-50/60 via-purple-50/60 to-pink-50/60 p-[2px] shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.25),0_20px_40px_-10px_rgba(147,51,234,0.25)] active:scale-[0.98] dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 dark:hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.15),0_20px_40px_-10px_rgba(147,51,234,0.15)] animate-fade-in-up"
-              style={{ animationDelay: `${index * 50}ms` }}
+              className="group relative rounded-2xl bg-gradient-to-br from-blue-50/60 via-purple-50/60 to-pink-50/60 p-[2px] shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.25),0_20px_40px_-10px_rgba(147,51,234,0.25)] active:scale-[0.98] dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 dark:hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.15),0_20px_40px_-10px_rgba(147,51,234,0.15)]"
             >
               <div className="relative h-full rounded-2xl bg-gradient-to-br from-white via-blue-50/5 to-purple-50/5 p-7 dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-750/20 dark:to-gray-700/40">
                 <button
@@ -117,95 +116,11 @@ export function HabitList({ habits, onHabitCreated }: HabitListProps) {
                     </h2>
                   </div>
                   <div className="space-y-2">
-                    {/* Calendar grid */}
-                    <div className="grid grid-cols-7 gap-1.5">
-                      {calendar.map((dateStr, index) => {
-                        if (dateStr === null) {
-                          return (
-                            <div
-                              key={`empty-${index}`}
-                              className="h-3.5 w-3.5"
-                            />
-                          );
-                        }
-
-                        const entry = habit.entries[dateStr];
-                        const percentage = getEntryPercentage(entry);
-                        const isCompleted = percentage === 100;
-                        const isPartial = percentage > 0 && percentage < 100;
-                        const isIncomplete = percentage === 0;
-
-                        if (isCompleted) {
-                          // Create tilted grid pattern using linear gradients
-                          const gridPattern = `repeating-linear-gradient(15deg, transparent, transparent 1px, rgba(255,255,255,0.2) 1px, rgba(255,255,255,0.2) 1.5px),
-                            repeating-linear-gradient(105deg, transparent, transparent 1px, rgba(255,255,255,0.2) 1px, rgba(255,255,255,0.2) 1.5px)`;
-                          return (
-                            <div
-                              key={dateStr}
-                              className="h-3.5 w-3.5 rounded-full transition-all duration-200 hover:scale-110"
-                              style={{
-                                backgroundImage: gridPattern,
-                                backgroundColor: habit.color,
-                              }}
-                              title={`${dateStr}: ${percentage}%`}
-                            />
-                          );
-                        }
-
-                        if (isPartial) {
-                          // Create tilted grid pattern with partial opacity
-                          const partialColor = getColorWithOpacity(
-                            habit.color,
-                            0.65
-                          );
-                          const gridPattern = `repeating-linear-gradient(15deg, transparent, transparent 1px, rgba(255,255,255,0.25) 1px, rgba(255,255,255,0.25) 1.5px),
-                            repeating-linear-gradient(105deg, transparent, transparent 1px, rgba(255,255,255,0.25) 1px, rgba(255,255,255,0.25) 1.5px)`;
-                          return (
-                            <div
-                              key={dateStr}
-                              className="h-3.5 w-3.5 rounded-full transition-all duration-200 hover:scale-110"
-                              style={{
-                                backgroundImage: gridPattern,
-                                backgroundColor: partialColor,
-                              }}
-                              title={`${dateStr}: ${percentage}%`}
-                            />
-                          );
-                        }
-
-                        if (isIncomplete) {
-                          // show a small cross icon in the center of the cell
-                          return (
-                            <div
-                              key={dateStr}
-                              className="flex items-center justify-center h-3.5 w-3.5 rounded-full bg-gray-200 dark:bg-gray-600 transition-all duration-200 hover:bg-gray-300 dark:hover:bg-gray-500"
-                            >
-                              <svg
-                                className="h-2 w-2"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="red"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M6 18L18 6M6 6l12 12"
-                                />
-                              </svg>
-                            </div>
-                          );
-                        }
-
-                        return (
-                          <div
-                            key={dateStr}
-                            className="h-3.5 w-3.5 rounded-full bg-gray-200 dark:bg-gray-600 transition-all duration-200 hover:bg-gray-300 dark:hover:bg-gray-500"
-                            title={`${dateStr}: ${percentage}%`}
-                          />
-                        );
-                      })}
-                    </div>
+                    <CalendarGrid
+                      calendar={calendar}
+                      entries={habit.entries}
+                      color={habit.color}
+                    />
                   </div>
                 </button>
                 <button
