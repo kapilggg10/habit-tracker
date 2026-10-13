@@ -114,6 +114,54 @@ interface Habit {
 - **Accessibility**: Keyboard navigation and screen reader support
 - **Progressive Enhancement**: Core functionality works without JavaScript
 
+## Habit Reminders (Push Notifications)
+
+Each habit can have one or more reminders. Open a habit and tap the **bell** icon next to *Delete*.
+
+- **Schedules**: daily at a time, on chosen weekdays, or a one-off date and time
+- **Skip if done**: don't send the reminder if the habit is already at 100% that day
+- **Pause/resume** or delete reminders at any time
+- When a reminder fires you get a **system notification**. On Android and desktop it has *Mark done* and *Open* actions. If the app is open, an **in-app popup** with the same actions also appears.
+- When you add a reminder, a confirmation notification is sent right away so you can check that delivery works.
+
+### How it works
+
+```
+Browser / PWA                                  Netlify
+─────────────                                  ───────
+ReminderDialog ──▶ localStorage ("reminders")
+NotificationManager ──POST push-sync──▶  push-sync fn ──▶ Netlify Blobs (push-devices)
+                                                                ▲
+public/sw.js  ◀── Web Push (VAPID) ── send-reminders fn (scheduled, every minute)
+  ├─ showNotification()
+  └─ postMessage → in-app popup
+```
+
+- There are no user accounts. Each install gets a random `deviceId`, and the backend stores that device's push subscription, timezone, reminders and recent completion dates.
+- `src/lib/reminder-schedule.ts` holds the scheduling logic and is shared by the UI and the scheduled function. Due times are evaluated in the device's timezone, with a 10-minute grace window and per-occurrence de-duplication.
+- Subscriptions that the push service reports as expired (404/410) are removed automatically.
+
+### Setup (one-time)
+
+1. Generate VAPID keys:
+   ```bash
+   npx web-push generate-vapid-keys
+   ```
+2. In Netlify → *Site configuration → Environment variables*, add:
+   | Variable | Value |
+   |---|---|
+   | `VAPID_PUBLIC_KEY` | public key from step 1 |
+   | `VAPID_PRIVATE_KEY` | private key from step 1 |
+   | `VAPID_SUBJECT` | `mailto:you@example.com` |
+3. Redeploy. Netlify Blobs needs no extra setup. Scheduled functions only run on the **published** production deploy.
+
+### Platform notes
+
+- **iPhone / iPad (iOS 16.4+)**: Web Push only works for the installed PWA. Tap *Share → Add to Home Screen*, open the app from the Home Screen, then add a reminder. Notification action buttons aren't supported on iOS, so tapping the notification opens the habit.
+- **Android / desktop Chrome, Edge, Firefox**: works in the browser and in the installed PWA.
+- **Local testing**: the service worker is disabled under `next dev`. Use `npm run build` and then `npx netlify dev` (with the env vars in a local `.env`) to exercise the full flow.
+- "Skip if done" uses the completion data last synced from the device. If you mark a habit done while offline, you may still get that day's reminder.
+
 ## Getting Started
 
 ### Prerequisites

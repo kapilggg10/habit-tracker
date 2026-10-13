@@ -3,6 +3,7 @@
 import { nanoid } from "nanoid";
 import type { Habit, HabitEntry } from "@/types/habit";
 import { DEFAULT_COLOR } from "./colors";
+import { deleteRemindersForHabit } from "./reminders";
 
 const STORAGE_KEY = "habits";
 
@@ -97,6 +98,7 @@ export function deleteHabit(habitId: string): void {
   const habits = getHabits();
   const filtered = habits.filter((h) => h.id !== habitId);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+  deleteRemindersForHabit(habitId);
 }
 
 export function getHabitById(habitId: string): Habit | undefined {

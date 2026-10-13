@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { NotificationManager } from "@/components/NotificationManager";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import "./globals.css";
 
@@ -56,6 +57,7 @@ export default function RootLayout({
       >
         {children}
         <ServiceWorkerRegistration />
+        <NotificationManager />
       </body>
     </html>
   );

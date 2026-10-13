@@ -302,3 +302,76 @@ self.addEventListener('message', (event) => {
   }
 });
 
+
+// ---------------------------------------------------------------------------
+// Habit reminders: Web Push
+// ---------------------------------------------------------------------------
+
+self.addEventListener('push', (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch {
+    data = { title: 'Habit reminder', body: event.data ? event.data.text() : '' };
+  }
+
+  const title = data.title || 'Habit reminder';
+  const isReminder = data.type === 'REMINDER' && data.habitId && data.reminderId !== 'test';
+
+  const options = {
+    body: data.body || '',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
+    tag: data.tag || undefined,
+    renotify: Boolean(data.tag),
+    requireInteraction: isReminder,
+    vibrate: [100, 50, 100],
+    data: { habitId: data.habitId || null },
+    // Action buttons are shown on Android/desktop; ignored on iOS.
+    actions: isReminder
+      ? [
+          { action: 'done', title: 'Mark done' },
+          { action: 'open', title: 'Open' },
+        ]
+      : [],
+  };
+
+  event.waitUntil(
+    (async () => {
+      await self.registration.showNotification(title, options);
+      // Let any open window show an in-app popup as well.
+      if (isReminder) {
+        const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+        windows.forEach((client) => client.postMessage({ ...data, type: 'REMINDER_FIRED' }));
+      }
+    })()
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const habitId = event.notification.data && event.notification.data.habitId;
+  const markDone = event.action === 'done' && habitId;
+
+  let targetUrl = '/';
+  if (habitId) {
+    targetUrl = markDone
+      ? `/?markDone=${encodeURIComponent(habitId)}#habit-${habitId}`
+      : `/#habit-${habitId}`;
+  }
+
+  event.waitUntil(
+    (async () => {
+      const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      const client = windows.find((c) => new URL(c.url).origin === self.location.origin);
+      if (client) {
+        await client.focus();
+        if (habitId) {
+          client.postMessage({ type: markDone ? 'MARK_DONE' : 'OPEN_HABIT', habitId });
+        }
+        return;
+      }
+      await self.clients.openWindow(targetUrl);
+    })()
+  );
+});
