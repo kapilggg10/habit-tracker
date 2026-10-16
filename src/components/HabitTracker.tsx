@@ -3,12 +3,21 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getDaysInMonth, formatDate } from "@/lib/utils";
-import { updateHabitEntry, getHabitById, deleteHabit, getEntryPercentage, getEntryDescription } from "@/lib/storage";
+import {
+  updateHabitEntry,
+  getHabitById,
+  deleteHabit,
+  getEntryPercentage,
+  getEntryDescription,
+} from "@/lib/storage";
 import type { Habit } from "@/types/habit";
 import { DayCell } from "./DayCell";
 import { CompletionSlider } from "./CompletionSlider";
 import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
 import { Confetti } from "./Confetti";
+import { BellIcon } from "./NotificationManager";
+import { ReminderDialog } from "./ReminderDialog";
+import { getRemindersForHabit, REMINDERS_UPDATED_EVENT } from "@/lib/reminders";
 
 interface HabitTrackerProps {
   habit: Habit;
@@ -20,6 +29,8 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showReminders, setShowReminders] = useState(false);
+  const [activeReminderCount, setActiveReminderCount] = useState(0);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -52,6 +63,21 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("habitsUpdated", handleStorageChange);
+    };
+  }, [habit.id]);
+
+  // Track how many active reminders this habit has (for the bell badge)
+  useEffect(() => {
+    const load = () =>
+      setActiveReminderCount(
+        getRemindersForHabit(habit.id).filter((r) => r.enabled).length,
+      );
+    load();
+    window.addEventListener(REMINDERS_UPDATED_EVENT, load);
+    window.addEventListener("storage", load);
+    return () => {
+      window.removeEventListener(REMINDERS_UPDATED_EVENT, load);
+      window.removeEventListener("storage", load);
     };
   }, [habit.id]);
 
@@ -201,13 +227,30 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
             {habit.name}
           </h1>
         </div>
-        <button
-          onClick={() => setShowDeleteConfirm(true)}
-          className="rounded-xl px-5 py-2.5 text-sm font-medium text-red-600 transition-all duration-200 hover:scale-105 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 dark:hover:bg-red-900/20 active:scale-95"
-          aria-label={`Delete ${habit.name}`}
-        >
-          Delete
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShowReminders(true)}
+            className="relative rounded-xl p-2.5 text-gray-600 transition-all duration-200 hover:scale-105 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 active:scale-95 dark:text-gray-300 dark:hover:bg-gray-700"
+            aria-label={`Reminders for ${habit.name}`}
+          >
+            <BellIcon className="h-6 w-6" />
+            {activeReminderCount > 0 && (
+              <span
+                className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-white"
+                style={{ backgroundColor: habit.color }}
+              >
+                {activeReminderCount}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setShowDeleteConfirm(true)}
+            className="rounded-xl px-5 py-2.5 text-sm font-medium text-red-600 transition-all duration-200 hover:scale-105 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 dark:hover:bg-red-900/20 active:scale-95"
+            aria-label={`Delete ${habit.name}`}
+          >
+            Delete
+          </button>
+        </div>
       </div>
 
       {/* Month Navigation */}
@@ -301,6 +344,12 @@ export function HabitTracker({ habit: initialHabit }: HabitTrackerProps) {
       )}
 
       {showConfetti && <Confetti color={habit.color} />}
+
+      <ReminderDialog
+        isOpen={showReminders}
+        habit={habit}
+        onClose={() => setShowReminders(false)}
+      />
 
       <DeleteConfirmDialog
         isOpen={showDeleteConfirm}
